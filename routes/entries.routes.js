@@ -7,5 +7,6 @@ const router = express.Router();
 
 
 router.get('/', entriesController.getEntries)
+router.post('/',entriesController.createEntry )
 
 module.exports = router;
