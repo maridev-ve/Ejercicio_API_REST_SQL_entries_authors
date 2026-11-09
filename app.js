@@ -12,7 +12,7 @@ const port = 3000;
 
 
 //Rutas
-//const entriesRoutes = require( './routes/entries.routes');
+const entriesRoutes = require( './routes/entries.routes');
 
 //Convertir a json los datos recibidos
 app.use(express.json())
@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 // http://localhost:3000/api/entries
-//app.use()
+app.use('/api/entries', entriesRoutes)
 
 app.listen( port, () =>{
     console.log(`Example app listening on http://localhost:${port}`)
