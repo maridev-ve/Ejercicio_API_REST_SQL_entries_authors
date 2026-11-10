@@ -58,8 +58,46 @@ const createEntry = async (title, content, email, category) => {
 
 }
 
+const updateEntry = async (new_title, content, category, email, title) => {
+    let client, result;
+    try {
+        client = await pool.connect();
+        result = await client.query(queries.updateEntry, [new_title, content, category, email, title])
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        if (client) {
+            // Cerrar conexión
+            client.release();
+        }
+    }
+    return result.rowCount;
+
+}
+
+const deleteEntry = async (title) => {
+    let client, result;
+    try {
+        client = await pool.connect();
+        result = await client.query(queries.deleteEntry, [title])
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } finally {
+        if (client) {
+            // Cerrar conexión
+            client.release();
+        }
+    }
+    return result.rowCount;
+
+}
+
 module.exports = {
     getAllEntries,
     getEntriesByEmail,
-    createEntry
+    createEntry,
+    updateEntry,
+    deleteEntry
 }

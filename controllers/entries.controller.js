@@ -40,7 +40,65 @@ const createEntry = async (req, res) => {
     }
 }
 
+const updateEntry = async (req, res) => {
+    try {
+        const { new_title, content, category, email, title } = req.body;
+
+        if (!title || !new_title || !content || !email) {
+            return res.status(400).json({
+                "message": `Faltan datos: debe haber titulos, contenido y email`
+            });
+        }
+
+        const response = await entry.updateEntry(new_title, content, category, email, title)
+
+        if (response === 0) {
+            return res.status(404).json({
+                "message": `No existe la entry ${title}`
+            });
+        }
+
+        res.status(200).json({
+            "message": `Se ha modificado la entry ${new_title}`
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ Error: "Error del servidor" })
+    }
+}
+
+const deleteEntry = async (req, res) => {
+    try {
+        const { title } = req.body;
+
+        if (!title) {
+            return res.status(400).json({
+                "message": `Faltan datos: debe haber un titulo`
+            });
+        }
+
+        const response = await entry.deleteEntry(title)
+
+        if (response === 0) {
+            return res.status(404).json({
+                "message": `No existe la entry ${title}`
+            });
+        }
+
+        res.status(200).json({
+            "message": `Se ha borrado la entry ${title}`
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ Error: "Error del servidor" })
+    }
+}
+
 module.exports = {
     getEntries,
-    createEntry
+    createEntry,
+    updateEntry,
+    deleteEntry
 }
