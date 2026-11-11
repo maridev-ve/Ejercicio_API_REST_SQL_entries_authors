@@ -34,9 +34,17 @@ const createAuthor = async (req, res) => {
         });
 
 
-    } catch (error) {
+    }catch (error) {
         console.error(error);
-        res.status(500).json({ Error: "Error del servidor" })
+        if (error.code === '23505') {
+            return res.status(409).json({
+                success: false,
+                Error: "409 Conflict ya existe un author con este email"
+            })
+        }
+        res.status(500).json({
+            Error: "Error del servidor"
+        })
     }
 }
 
@@ -64,7 +72,15 @@ const updateAuthor = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ Error: "Error del servidor" })
+        if (error.code === '23505') {
+            return res.status(409).json({
+                success: false,
+                Error: "409 Conflict ya existe un author con este email"
+            })
+        }
+        res.status(500).json({
+            Error: "Error del servidor"
+        })
     }
 }
 

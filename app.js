@@ -1,11 +1,12 @@
 //Variables de entorno
 require('dotenv').config()
-const helmet = require("helmet")
-const morgan = require("./middleware/morgan");
 
 
 //importar el modulo
 const express = require("express")
+const helmet = require("helmet")
+
+const morgan = require("./middleware/morgan");
 
 //crear el objeto servidor (vacio)
 const app = express();
@@ -41,7 +42,15 @@ app.get("/", (req, res) => {
 
 // http://localhost:3000/api/entries
 app.use('/api/entries', entriesRoutes)
+//Prueba entries
+/* {
+    "title": "Amanece Madrid lleno de arena",
+    "new_title": "prueba titulo",
+    "content": "contenido sin sentido",
+    "email": "birja@thebridgeschool.es"
+} */
 
+    
 // http://localhost:3000/api/authors
 app.use('/api/authors', authorsRoutes);
 

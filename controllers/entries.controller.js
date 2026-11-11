@@ -23,11 +23,11 @@ const createEntry = async (req, res) => {
 
         if (!title || !content || !email) {
             return res.status(400).json({
-                "message": `Faltan datos: debe haber titulo, contenido y email`
+                "message": `Faltan datos: debe haber title, content y email`
             });
         }
 
-        await entry.createEntry(title, content, email, category)
+        const result = await entry.createEntry(title, content, email, category)
 
         res.status(201).json({
             "message": `Se ha creado la entry ${title}`
@@ -36,7 +36,15 @@ const createEntry = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ Error: "Error del servidor" })
+        if (error.code === '23505') {
+            return res.status(409).json({
+                success: false,
+                Error: "409 Conflict ya existe una entry con ese título"
+            })
+        }
+        res.status(500).json({
+            Error: "Error del servidor"
+        })
     }
 }
 
@@ -46,7 +54,7 @@ const updateEntry = async (req, res) => {
 
         if (!title || !new_title || !content || !email) {
             return res.status(400).json({
-                "message": `Faltan datos: debe haber titulos, contenido y email`
+                "message": `Faltan datos: debe haber title, new_title, content, email`
             });
         }
 
@@ -64,7 +72,19 @@ const updateEntry = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ Error: "Error del servidor" })
+
+        /*  Tienes dos entries, "A" y "B". Haces un PUT con title: "A" y new_title: "B".
+          El UPDATE intentaría que "A" pase a llamarse "B", pero "B" ya existe.
+           El UNIQUE de title lo rechaza con un 23505, igual que en el INSERT. */
+        if (error.code === '23505') {
+            return res.status(409).json({
+                success: false,
+                Error: "409 Conflict ya existe una entry con ese título"
+            })
+        }
+        res.status(500).json({
+            Error: "Error del servidor"
+        })
     }
 }
 
@@ -74,7 +94,7 @@ const deleteEntry = async (req, res) => {
 
         if (!title) {
             return res.status(400).json({
-                "message": `Faltan datos: debe haber un titulo`
+                "message": `Faltan datos: debe haber un título`
             });
         }
 

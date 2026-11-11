@@ -14,7 +14,7 @@ CREATE TABLE entries (
   date date DEFAULT CURRENT_DATE,
   id_author int,
   category varchar(15),
-  FOREIGN KEY (id_author) REFERENCES authors(id_author)
+  FOREIGN KEY (id_author) REFERENCES authors(id_author) ON DELETE CASCADE
 );
 -- Insertar datos en tabla authors
 INSERT INTO authors(name,surname,email,image)

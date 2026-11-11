@@ -1,3 +1,6 @@
+--para que no se repitan títulos
+
+
 -- Primero: confirmo datos 
 SELECT * FROM public.entries
 ORDER BY id_entry ASC ;
