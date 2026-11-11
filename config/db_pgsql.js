@@ -13,6 +13,7 @@ const pool = new Pool({
     port: process.env.DB_PORT,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
+    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false
 });
 
 const comprobarConexion = async () => {
