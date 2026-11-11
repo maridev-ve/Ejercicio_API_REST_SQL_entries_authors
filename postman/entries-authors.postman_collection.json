@@ -1,0 +1,1293 @@
+{
+  "info": {
+    "name": "API REST entries & authors",
+    "description": "Pruebas de la API desplegada en Render.\n\n**Cómo usarla**\n1. Importar este archivo en Postman (Import → archivo).\n2. Ejecutar la colección completa con el Runner (botón Run), en orden: cada carpeta usa los datos que crea la anterior.\n3. Cada petición tiene un test que comprueba el status esperado; su descripción explica qué validación prueba.\n\n**Datos**: crea un autor y una entry de prueba y los borra al final, así que la BBDD queda como estaba.\n\n**Variable `baseUrl`**: apunta a la API de Render. Para probar en local, cambiarla a `http://localhost:3000`.\n\n**Nota**: el plan gratuito de Render se duerme tras 15 min sin uso; la primera petición puede tardar ~1 minuto.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api-rest-sql-entries-authors-15yv.onrender.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. GET (lectura y validación de ?email)",
+      "item": [
+        {
+          "name": "Raíz de la API",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            },
+            "description": "**Esperado: 200**\n\nComprueba que el servidor responde."
+          }
+        },
+        {
+          "name": "Todas las entries",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nDevuelve todas las entries con los datos de su autor (JOIN)."
+          }
+        },
+        {
+          "name": "Entries de un autor (?email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries?email=birja@thebridgeschool.es",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "birja@thebridgeschool.es"
+                }
+              ]
+            },
+            "description": "**Esperado: 200**\n\nDevuelve solo las entries del autor con ese email."
+          }
+        },
+        {
+          "name": "Entries con email inválido → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries?email=hola",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "hola"
+                }
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidación (express-validator, query): si se envía ?email debe tener formato de email y máx. 100 caracteres. Si no se envía, es opcional."
+          }
+        },
+        {
+          "name": "Todos los autores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nDevuelve todos los autores."
+          }
+        },
+        {
+          "name": "Un autor por email (?email)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors?email=birja@thebridgeschool.es",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "birja@thebridgeschool.es"
+                }
+              ]
+            },
+            "description": "**Esperado: 200**\n\nDevuelve el autor con ese email."
+          }
+        },
+        {
+          "name": "Autores con email inválido → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors?email=hola",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "hola"
+                }
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidación (query): formato de email."
+          }
+        },
+        {
+          "name": "Ruta inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ruta-que-no-existe",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ruta-que-no-existe"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nMiddleware error404: cualquier ruta no definida responde 404."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Authors - crear (POST)",
+      "item": [
+        {
+          "name": "Crear autor → 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 201**\n\nCrea el autor de prueba que usarán las siguientes peticiones.\n\nValidaciones del POST:\n- name: obligatorio, texto, 3-45 caracteres\n- surname: obligatorio, texto, 3-45 caracteres\n- email: formato email, máx. 100 caracteres",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prueba\",\n  \"surname\": \"Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"image\": \"https://randomuser.me/api/portraits/lego/1.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear autor duplicado → 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 409**\n\nEl email es UNIQUE en la BBDD: PostgreSQL devuelve el código 23505 y la API responde 409 Conflict.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prueba\",\n  \"surname\": \"Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"image\": \"https://randomuser.me/api/portraits/lego/1.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear autor con datos inválidos → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nDevuelve la lista de errores de validación: name vacío, surname con menos de 3 caracteres y email con formato inválido.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"surname\": \"Re\",\n  \"email\": \"noesunemail\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Entries - CRUD completo",
+      "item": [
+        {
+          "name": "Crear entry → 201",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 201**\n\nValidaciones del POST:\n- title: obligatorio, texto, 3-100 caracteres\n- content: obligatorio, texto, mín. 10 caracteres\n- email: formato email (debe ser de un autor existente)\n- category: obligatoria, texto, 5-15 caracteres",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"content\": \"Contenido de la entry creada desde Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear entry con título duplicado → 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 409**\n\nEl título es UNIQUE en la BBDD → 409 Conflict.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"content\": \"Contenido de la entry creada desde Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear entry con autor inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nAntes de insertar se comprueba que el email corresponde a un autor existente. Si no, 404 y no se toca la BBDD.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Esta entry no debería crearse\",\n  \"content\": \"Contenido de prueba suficientemente largo\",\n  \"email\": \"noexiste@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Crear entry con datos inválidos → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nErrores: title demasiado corto, content con menos de 10 caracteres, email inválido y category con más de 15 caracteres.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"\",\n  \"content\": \"corto\",\n  \"email\": \"malo\",\n  \"category\": \"Categoria demasiado larga\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar entry con datos inválidos → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidaciones del PUT:\n- title (entry a modificar): obligatorio, texto, 3-100\n- new_title: obligatorio, texto, 3-100\n- content: obligatorio, mín. 10\n- email: formato email (autor existente)\n- category: obligatoria, 5-15",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"new_title\": \"\",\n  \"content\": \"corto\",\n  \"email\": \"malo\",\n  \"category\": \"abc\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar entry inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nNo hay ninguna entry con ese title.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Titulo que no existe\",\n  \"new_title\": \"Otro titulo\",\n  \"content\": \"Contenido de prueba suficientemente largo\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar entry con autor inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nEl email no corresponde a ningún autor: 404 y la entry no se modifica.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"new_title\": \"Entry de prueba Postman modificada\",\n  \"content\": \"Contenido de prueba suficientemente largo\",\n  \"email\": \"noexiste@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar entry con new_title ya existente → 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 409**\n\nYa existe otra entry con ese título (UNIQUE) → 409.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"new_title\": \"Noticia: SOL en Madrid\",\n  \"content\": \"Contenido de prueba suficientemente largo\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"category\": \"Pruebas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar entry → 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nModifica la entry buscándola por title.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman\",\n  \"new_title\": \"Entry de prueba Postman modificada\",\n  \"content\": \"Contenido modificado desde Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"category\": \"Modificada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar entry sin título → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidación del DELETE: title obligatorio, texto, máx. 100 caracteres.",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar entry → 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nBorra la entry buscándola por title.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman modificada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar entry ya borrada → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "entries"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nLa entry ya no existe.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Entry de prueba Postman modificada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Authors - modificar y borrar (PUT / DELETE)",
+      "item": [
+        {
+          "name": "Modificar autor con datos inválidos → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidaciones del PUT:\n- name, surname: obligatorios, texto, 3-45\n- email (autor a modificar): formato email, máx. 100\n- new_email: obligatorio, formato email, máx. 100\n- image: obligatoria, URL válida, máx. 255 caracteres",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"surname\": \"Re\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"new_email\": \"noesunemail\",\n  \"image\": \"noesunaurl\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar autor inexistente → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nNo hay ningún autor con ese email.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prueba\",\n  \"surname\": \"Postman\",\n  \"email\": \"noexiste@thebridgeschool.es\",\n  \"new_email\": \"otro@thebridgeschool.es\",\n  \"image\": \"https://randomuser.me/api/portraits/lego/2.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar autor con new_email ya existente → 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 409**\n\nEl nuevo email ya pertenece a otro autor (UNIQUE) → 409.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prueba\",\n  \"surname\": \"Postman\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"new_email\": \"birja@thebridgeschool.es\",\n  \"image\": \"https://randomuser.me/api/portraits/lego/2.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Modificar autor → 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nModifica el autor buscándolo por email.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Prueba2\",\n  \"surname\": \"Postman2\",\n  \"email\": \"prueba.postman@thebridgeschool.es\",\n  \"new_email\": \"prueba.postman2@thebridgeschool.es\",\n  \"image\": \"https://randomuser.me/api/portraits/lego/2.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar autor con email inválido → 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 400**\n\nValidación del DELETE: email obligatorio, formato email, máx. 100 caracteres.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"noesunemail\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar autor → 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 200**\n\nBorra el autor (sus entries se borrarían también por ON DELETE CASCADE).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"prueba.postman2@thebridgeschool.es\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Borrar autor ya borrado → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/authors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "authors"
+              ]
+            },
+            "description": "**Esperado: 404**\n\nEl autor ya no existe.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"prueba.postman2@thebridgeschool.es\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
