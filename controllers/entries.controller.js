@@ -1,4 +1,5 @@
 const entry = require("../models/entries.model");
+const authorModel = require("../models/authors.model")
 
 const getEntries = async (req, res) => {
     let entries;
@@ -25,6 +26,14 @@ const createEntry = async (req, res) => {
             return res.status(400).json({
                 "message": `Faltan datos: debe haber title, content y email`
             });
+        }
+
+        // Comprueba si el email que envías corresponde a un autor que existe
+        const resultByEmail = await authorModel.getAuthorByEmail(email)
+        if (!resultByEmail) {
+            return res.status(404).json({
+                message: `No existe el autor ${email}`
+            })
         }
 
         const result = await entry.createEntry(title, content, email, category)
@@ -56,6 +65,14 @@ const updateEntry = async (req, res) => {
             return res.status(400).json({
                 "message": `Faltan datos: debe haber title, new_title, content, email`
             });
+        }
+
+        // Comprueba si el email que envías corresponde a un autor que existe
+        const resultByEmail = await authorModel.getAuthorByEmail(email)
+        if (!resultByEmail) {
+            return res.status(404).json({
+                message: `No existe el autor ${email}`
+            })
         }
 
         const response = await entry.updateEntry(new_title, content, category, email, title)
