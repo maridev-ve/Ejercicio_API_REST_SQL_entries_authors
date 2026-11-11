@@ -35,7 +35,19 @@ WHERE a.email = $1;`,
               WHERE title = $5`,
 
         deleteEntry: `DELETE  
-                        FROM entries WHERE title=$1`
+                        FROM entries WHERE title=$1`,
+
+        createTable: `CREATE TABLE IF NOT EXISTS entries (
+                        id_entry serial NOT NULL PRIMARY KEY, 
+                        title varchar(100) NOT NULL UNIQUE, 
+                        content text NOT NULL, 
+                        date date DEFAULT CURRENT_DATE,
+                        id_author int,
+                        category varchar(15),
+                        FOREIGN KEY (id_author) REFERENCES authors(id_author) ON DELETE CASCADE
+                        );`,
+
+    dropTable : `DROP TABLE IF EXISTS entries`
 }
 
 

@@ -9,7 +9,7 @@ CREATE TABLE authors (
 -- Crear tabla entries
 CREATE TABLE entries (
   id_entry serial NOT NULL PRIMARY KEY, 
-  title varchar(100) NOT NULL, 
+  title varchar(100) NOT NULL UNIQUE, 
   content text NOT NULL, 
   date date DEFAULT CURRENT_DATE,
   id_author int,

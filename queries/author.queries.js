@@ -17,7 +17,18 @@ const queriesAuthor = {
 
 
     deleteAuthor: `DELETE  
-                FROM authors WHERE email=$1`
+                FROM authors WHERE email=$1`,
+
+    createTable: `CREATE TABLE IF NOT EXISTS authors (
+                id_author serial NOT NULL PRIMARY KEY, 
+                name varchar(45) NOT NULL, 
+                surname varchar(45) NOT NULL, 
+                email varchar(100) NOT NULL UNIQUE,
+                image varchar(255)
+                );`,
+
+    dropTable : `DROP TABLE IF EXISTS authors`
+    
 }
 
 module.exports = queriesAuthor
