@@ -5,14 +5,20 @@ const entriesController = require("../controllers/entries.controller")
 //"mini-app" vacío donde voy a guardar las rutas de entries
 const router = express.Router();
 
+//Middlewares
+const checkValidation = require( "../middleware/checkValidation" )
 
-router.get('/', entriesController.getEntries)
+//validator
+const {validateCreateEntry, validateUpdateEntry, validateDeleteEntry, validateGetByEmail} = require( "../validators/validators" )
 
-router.post('/',entriesController.createEntry )
 
-router.put('/',entriesController.updateEntry)
+router.get('/',validateGetByEmail, checkValidation, entriesController.getEntries)
 
-router.delete('/',entriesController.deleteEntry)
+router.post('/', validateCreateEntry, checkValidation, entriesController.createEntry )
+
+router.put('/',validateUpdateEntry, checkValidation, entriesController.updateEntry)
+
+router.delete('/', validateDeleteEntry ,checkValidation, entriesController.deleteEntry)
 
 
 module.exports = router;

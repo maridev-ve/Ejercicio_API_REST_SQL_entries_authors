@@ -6,7 +6,11 @@ require('dotenv').config()
 const express = require("express")
 const helmet = require("helmet")
 
+
+//Middlewares
 const morgan = require("./middleware/morgan");
+const error404 = require("./middleware/error404")
+
 
 //crear el objeto servidor (vacio)
 const app = express();
@@ -74,6 +78,11 @@ PUT{
 
 DELETE { "email": "prueba2@test.com" }
  */
+
+
+//Middleware para ruta no encontrada
+app.use(error404);
+
 
 app.listen( port, () =>{
     console.log(`Example app listening on http://localhost:${port}`)
