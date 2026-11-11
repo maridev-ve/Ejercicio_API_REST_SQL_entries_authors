@@ -15,8 +15,8 @@ const error404 = require("./middleware/error404")
 //crear el objeto servidor (vacio)
 const app = express();
 
-//puerto
-const port = 3000;
+//puerto con Render y si no hay 3000
+const port = process.env.PORT || 3000;
 
 //Securizar la API con helmet
 app.use(helmet());
